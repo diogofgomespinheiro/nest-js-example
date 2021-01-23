@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: api-container
+    build: .
+    restart: always
+    image: nest-js-example-api
+    working_dir: /usr/app
+    command: npm run start:dev
+    ports: 
+      - "3000:3000"
+    volumes:
+      - ./dist/:/usr/app/dist/
+      - ./package.json:/usr/app/package.json
+
+  postgres:
+    container_name: nest-js-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: "localuser"
+      POSTGRES_PASSWORD: "localpass"
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: nest-js-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin4@pgadmin.org"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    volumes:
+       - pgadmin:/root/.pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:

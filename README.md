@@ -19,6 +19,14 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# run through docker
+npm run docker:up
+npm run docker:down
+
+# initiate only databases
+npm run docker:db:up
+npm run docker:db:down
 ```
 
 ## Test
